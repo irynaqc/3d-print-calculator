@@ -2,49 +2,198 @@
 <html lang="uk">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Про-калькулятор 3D друку • Bambu A1 Mini • Податки</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>3D Калькулятор друку • Bambu A1 Mini</title>
+
+  <!-- ✅ PWA: щоб було як “додаток” -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#22c55e">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="icon" href="icon-192.png">
+
   <style>
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:#f5f7fb;margin:0;padding:20px}
-    h1{margin:0 0 6px;font-size:34px}
-    small{color:#6b7280}
-    .wrapper{max-width:1200px;margin:auto;display:grid;grid-template-columns:2fr 1fr;gap:20px}
-    @media(max-width:900px){.wrapper{grid-template-columns:1fr}}
-    .card{background:#fff;border-radius:18px;padding:18px;box-shadow:0 10px 35px rgba(0,0,0,.06);margin-bottom:18px}
-    h2{font-size:18px;margin:0 0 14px;display:flex;align-items:center;gap:10px}
-    .tabs{display:flex;gap:10px;margin-bottom:14px}
-    .tab{padding:10px 16px;border-radius:999px;border:1px solid #d1d5db;background:#fff;cursor:pointer;font-weight:700}
-    .tab.active{background:#22c55e;border-color:#22c55e;color:#fff}
-    .form{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-    @media(max-width:850px){.form{grid-template-columns:1fr}}
-    label{font-size:13px;color:#6b7280;display:flex;flex-direction:column;gap:6px}
-    input{padding:12px;border-radius:14px;border:1px solid #d1d5db;font-size:18px}
+    :root{
+      --bg:#f5f7fb;
+      --card:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --line:#d1d5db;
+      --accent:#22c55e;
+      --accentDark:#14532d;
+      --greenBg:#eafff0;
+      --greenLine:#86efac;
+      --purpleBg:#eeecff;
+      --purpleLine:#c4b5fd;
+      --shadow:0 10px 35px rgba(0,0,0,.06);
+      --r:18px;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background:var(--bg);
+      margin:0;
+      color:var(--text);
+      padding:20px;
+    }
+
+    h1{margin:0 0 6px;font-size:34px;line-height:1.1}
+    small{color:var(--muted);font-weight:600}
+
+    .wrapper{
+      max-width:1200px;
+      margin:16px auto 0;
+      display:grid;
+      grid-template-columns:2fr 1fr;
+      gap:20px;
+      align-items:start;
+    }
+
+    .card{
+      background:var(--card);
+      border-radius:var(--r);
+      padding:18px;
+      box-shadow:var(--shadow);
+      margin-bottom:18px;
+    }
+
+    h2{
+      font-size:18px;
+      margin:0 0 14px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .tabs{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+    .tab{
+      padding:10px 16px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#fff;
+      cursor:pointer;
+      font-weight:900;
+      user-select:none;
+    }
+    .tab.active{
+      background:var(--accent);
+      border-color:var(--accent);
+      color:#fff;
+    }
+
+    .form{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+    }
+    .form.two{grid-template-columns:repeat(2,1fr)}
+    @media(max-width:900px){
+      .wrapper{grid-template-columns:1fr}
+      .form{grid-template-columns:1fr}
+      .form.two{grid-template-columns:1fr}
+    }
+
+    label{
+      font-size:13px;
+      color:var(--muted);
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      font-weight:700;
+    }
+
+    input{
+      padding:12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      font-size:18px;
+      outline:none;
+      background:#fff;
+    }
+    input:focus{
+      border-color:#a7f3d0;
+      box-shadow:0 0 0 4px rgba(34,197,94,.15);
+    }
+
     .summary{position:sticky;top:20px}
     @media(max-width:900px){.summary{position:static}}
-    .row{display:flex;justify-content:space-between;align-items:center;margin:12px 0;font-size:18px}
-    .row b{font-weight:900}
-    .totalBox{background:#eafff0;border:1px solid #86efac;border-radius:18px;padding:18px;margin:16px 0}
-    .totalBox .t{font-size:22px;margin-bottom:8px}
-    .totalBox .v{font-size:40px;font-weight:950;color:#14532d}
-    .price{border-radius:18px;padding:16px;margin:14px 0;border:1px solid transparent}
-    .green{background:#eafff0;border-color:#86efac}
-    .purple{background:#eeecff;border-color:#c4b5fd}
-    .price .cap{font-size:22px;font-weight:950;margin-bottom:6px}
-    .price .val{font-size:22px}
-    button{width:100%;padding:18px;border:none;border-radius:18px;background:#22c55e;color:#fff;font-size:22px;font-weight:950;cursor:pointer}
+
+    .row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin:12px 0;
+      font-size:18px;
+      gap:10px;
+    }
+    .row b{font-weight:950;white-space:nowrap}
+
+    .totalBox{
+      background:var(--greenBg);
+      border:1px solid var(--greenLine);
+      border-radius:var(--r);
+      padding:18px;
+      margin:16px 0;
+    }
+    .totalBox .t{font-size:22px;margin-bottom:8px;font-weight:900}
+    .totalBox .v{font-size:40px;font-weight:1000;color:var(--accentDark)}
+
+    .price{
+      border-radius:var(--r);
+      padding:16px;
+      margin:14px 0;
+      border:1px solid transparent;
+    }
+    .green{background:var(--greenBg);border-color:var(--greenLine)}
+    .purple{background:var(--purpleBg);border-color:var(--purpleLine)}
+    .price .cap{font-size:20px;font-weight:1000;margin-bottom:6px}
+    .price .val{font-size:22px;font-weight:900}
+
+    button{
+      width:100%;
+      padding:18px;
+      border:none;
+      border-radius:var(--r);
+      background:var(--accent);
+      color:#fff;
+      font-size:22px;
+      font-weight:1000;
+      cursor:pointer;
+    }
     button:active{transform:scale(.99)}
-    #status{margin:10px 0;color:#6b7280;font-weight:800;line-height:1.25}
+    #status{
+      margin:10px 0;
+      color:var(--muted);
+      font-weight:800;
+      line-height:1.25;
+      font-size:14px;
+    }
+
+    /* ✅ МОБІЛЬНИЙ ВИГЛЯД “ЯК ДОДАТОК” */
+    @media (max-width: 600px) {
+      body{padding:12px}
+      h1{font-size:26px}
+      small{font-size:13px}
+      .card{padding:16px;border-radius:16px}
+      label{font-size:14px}
+      input{font-size:20px;padding:14px;border-radius:16px}
+      .tab{padding:12px 16px;font-size:16px}
+      .row{font-size:18px}
+      .totalBox .v{font-size:34px}
+      button{font-size:22px;padding:18px;border-radius:16px}
+      #status{font-size:13px}
+    }
   </style>
 </head>
 
 <body>
-  <h1>💰 Про-калькулятор 3D друку</h1>
-  <small>Bambu A1 Mini • PLA / PETG • грн • з урахуванням податків (ФОП)</small>
+  <h1>💰 3D Калькулятор друку</h1>
+  <small>Bambu A1 Mini • PLA / PETG • грн • податки ФОП</small>
 
   <div class="wrapper">
     <div>
       <div class="card">
-        <h2⚙️ Базові витрати</h2>
+        <h2>⚙️ Базові витрати</h2>
 
         <div class="tabs">
           <div class="tab active" data-mat="PLA" data-w="130">PLA (130W)</div>
@@ -75,7 +224,7 @@
 
       <div class="card">
         <h2>🔧 Сервісні налаштування</h2>
-        <div class="form" style="grid-template-columns:repeat(2,1fr)">
+        <div class="form two">
           <label>Ціна за запуск (грн)
             <input id="setup" type="number" step="0.01" value="50">
           </label>
@@ -87,7 +236,7 @@
         <div style="height:14px"></div>
 
         <h2 style="margin-top:0">🧾 Податки ФОП</h2>
-        <div class="form" style="grid-template-columns:repeat(2,1fr)">
+        <div class="form two">
           <label>Податки/місяць (грн)
             <input id="taxMonthly" type="number" step="0.01" value="5000">
           </label>
@@ -178,17 +327,17 @@
     const extra = num('extra') * qty;
     const minOrder = num('minOrder');
 
-    // 🧾 Податки: розкладаємо "податки/місяць" на 1 замовлення
-    const taxMonthly = num('taxMonthly'); // напр. 5000
-    const ordersMonthly = Math.max(1, Math.round(num('ordersMonthly'))); // напр. 30
+    // Податки/замовлення
+    const taxMonthly = num('taxMonthly');
+    const ordersMonthly = Math.max(1, Math.round(num('ordersMonthly')));
     const taxPerOrder = taxMonthly / ordersMonthly;
 
+    // Собівартість
     const plastic = (spoolPrice / spoolWeight) * (weight1 * qty);
     const energyPlusAmort = ((powerW/1000) * totalTime * kwhRate) + (totalTime * amortPerHour);
-
     const total = plastic + energyPlusAmort + setup + extra;
 
-    // ✅ Ціна як на скріні, але додаємо податок на 1 замовлення (окремо від собівартості друку)
+    // Ціни продажу
     const p2 = Math.max(minOrder, (total * 2) + taxPerOrder);
     const p3 = Math.max(minOrder, (total * 3) + taxPerOrder);
 
@@ -203,13 +352,12 @@
 
     const now = new Date();
     set('status',
-      'Статус: перераховано ' + now.toLocaleTimeString() +
-      ' • Податок/замовлення ≈ ' + taxPerOrder.toFixed(0) + ' грн' +
-      ' ( ' + taxMonthly.toFixed(0) + ' грн / ' + ordersMonthly + ' замовл. )'
+      'Оновлено: ' + now.toLocaleTimeString() +
+      ' • Податок/замовлення ≈ ' + taxPerOrder.toFixed(0) + ' грн'
     );
   }
 
-  // Таби
+  // Перемикач PLA/PETG
   document.querySelectorAll('.tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -220,30 +368,25 @@
     });
   });
 
-  // Кнопка
+  // Кнопка перерахунку
   $('recalcBtn').addEventListener('click', () => {
     $('recalcBtn').textContent = '✅ Перераховано';
     calc();
     setTimeout(()=> $('recalcBtn').textContent = '🔄 Перерахувати', 700);
   });
 
-  // Авто-перерахунок при зміні цифр
+  // Авто-перерахунок при зміні полів
   [
     'spoolPrice','spoolWeight','kwh','amort','power','setup','minOrder',
     'taxMonthly','ordersMonthly',
     'extra','weight','qty','hours','mins'
   ].forEach(id => {
     const el = $(id);
-    if (el) {
-      el.addEventListener('input', calc);
-      el.addEventListener('change', calc);
-    }
+    if (el) { el.addEventListener('input', calc); el.addEventListener('change', calc); }
   });
 
-  // Старт
   calc();
 })();
 </script>
-
 </body>
 </html>
