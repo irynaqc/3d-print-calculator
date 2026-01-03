@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Про-калькулятор 3D друку • Bambu A1 Mini • Податки</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:#f5f7fb;margin:0;padding:20px}
+    h1{margin:0 0 6px;font-size:34px}
+    small{color:#6b7280}
+    .wrapper{max-width:1200px;margin:auto;display:grid;grid-template-columns:2fr 1fr;gap:20px}
+    @media(max-width:900px){.wrapper{grid-template-columns:1fr}}
+    .card{background:#fff;border-radius:18px;padding:18px;box-shadow:0 10px 35px rgba(0,0,0,.06);margin-bottom:18px}
+    h2{font-size:18px;margin:0 0 14px;display:flex;align-items:center;gap:10px}
+    .tabs{display:flex;gap:10px;margin-bottom:14px}
+    .tab{padding:10px 16px;border-radius:999px;border:1px solid #d1d5db;background:#fff;cursor:pointer;font-weight:700}
+    .tab.active{background:#22c55e;border-color:#22c55e;color:#fff}
+    .form{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    @media(max-width:850px){.form{grid-template-columns:1fr}}
+    label{font-size:13px;color:#6b7280;display:flex;flex-direction:column;gap:6px}
+    input{padding:12px;border-radius:14px;border:1px solid #d1d5db;font-size:18px}
+    .summary{position:sticky;top:20px}
+    @media(max-width:900px){.summary{position:static}}
+    .row{display:flex;justify-content:space-between;align-items:center;margin:12px 0;font-size:18px}
+    .row b{font-weight:900}
+    .totalBox{background:#eafff0;border:1px solid #86efac;border-radius:18px;padding:18px;margin:16px 0}
+    .totalBox .t{font-size:22px;margin-bottom:8px}
+    .totalBox .v{font-size:40px;font-weight:950;color:#14532d}
+    .price{border-radius:18px;padding:16px;margin:14px 0;border:1px solid transparent}
+    .green{background:#eafff0;border-color:#86efac}
+    .purple{background:#eeecff;border-color:#c4b5fd}
+    .price .cap{font-size:22px;font-weight:950;margin-bottom:6px}
+    .price .val{font-size:22px}
+    button{width:100%;padding:18px;border:none;border-radius:18px;background:#22c55e;color:#fff;font-size:22px;font-weight:950;cursor:pointer}
+    button:active{transform:scale(.99)}
+    #status{margin:10px 0;color:#6b7280;font-weight:800;line-height:1.25}
+  </style>
+</head>
+
+<body>
+  <h1>💰 Про-калькулятор 3D друку</h1>
+  <small>Bambu A1 Mini • PLA / PETG • грн • з урахуванням податків (ФОП)</small>
+
+  <div class="wrapper">
+    <div>
+      <div class="card">
+        <h2⚙️ Базові витрати</h2>
+
+        <div class="tabs">
+          <div class="tab active" data-mat="PLA" data-w="130">PLA (130W)</div>
+          <div class="tab" data-mat="PETG" data-w="170">PETG (170W)</div>
+        </div>
+
+        <div class="form">
+          <label>Ціна котушки (грн)
+            <input id="spoolPrice" type="number" step="0.01" value="500">
+          </label>
+          <label>Вага котушки (г)
+            <input id="spoolWeight" type="number" step="1" value="1000">
+          </label>
+          <label>Тариф світла (грн/кВт·год)
+            <input id="kwh" type="number" step="0.01" value="4.32">
+          </label>
+          <label>Амортизація (грн/год)
+            <input id="amort" type="number" step="0.01" value="10">
+          </label>
+          <label>Споживання (Вт)
+            <input id="power" type="number" step="1" value="130">
+          </label>
+          <label>Філамент у звіті
+            <input id="material" type="text" value="PLA">
+          </label>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>🔧 Сервісні налаштування</h2>
+        <div class="form" style="grid-template-columns:repeat(2,1fr)">
+          <label>Ціна за запуск (грн)
+            <input id="setup" type="number" step="0.01" value="50">
+          </label>
+          <label>Мін. ціна замовлення (грн)
+            <input id="minOrder" type="number" step="0.01" value="150">
+          </label>
+        </div>
+
+        <div style="height:14px"></div>
+
+        <h2 style="margin-top:0">🧾 Податки ФОП</h2>
+        <div class="form" style="grid-template-columns:repeat(2,1fr)">
+          <label>Податки/місяць (грн)
+            <input id="taxMonthly" type="number" step="0.01" value="5000">
+          </label>
+          <label>Замовлень/місяць (шт)
+            <input id="ordersMonthly" type="number" step="1" value="30">
+          </label>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>📦 Дані про модель</h2>
+        <div class="form">
+          <label>Назва деталі/замовлення
+            <input id="name" type="text" value="Коробка + кришка">
+          </label>
+          <label>Додаткові витрати (грн/шт)
+            <input id="extra" type="number" step="0.01" value="0">
+          </label>
+          <label>Вага 1 шт (г)
+            <input id="weight" type="number" step="0.01" value="0">
+          </label>
+          <label>Кількість (шт)
+            <input id="qty" type="number" step="1" value="1">
+          </label>
+          <label>Час 1 шт (год)
+            <input id="hours" type="number" step="0.01" value="0">
+          </label>
+          <label>Хв
+            <input id="mins" type="number" step="1" value="0">
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="summary card">
+      <h2>Кошторис партії</h2>
+
+      <div class="row"><span>Пластик:</span><b id="cPlastic">0.00 грн</b></div>
+      <div class="row"><span>Енергія + знос:</span><b id="cEnergy">0.00 грн</b></div>
+      <div class="row"><span>Запуск:</span><b id="cSetup">50.00 грн</b></div>
+      <div class="row"><span>Додатково:</span><b id="cExtra">0.00 грн</b></div>
+
+      <div class="totalBox">
+        <div class="t">Собівартість:</div>
+        <div class="v" id="total">50.00 грн</div>
+      </div>
+
+      <div class="price green">
+        <div class="cap">ЦІНА (×2 + фікс + податки)</div>
+        <div class="val" id="p2">150 грн</div>
+      </div>
+
+      <div class="price purple">
+        <div class="cap">СКЛАДНЕ (×3 + фікс + податки)</div>
+        <div class="val" id="p3">150 грн</div>
+      </div>
+
+      <div id="status">Статус: скрипт ще не рахував…</div>
+      <button id="recalcBtn">🔄 Перерахувати</button>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const num = (id) => {
+    const el = $(id);
+    if (!el) return 0;
+    const v = parseFloat(el.value);
+    return Number.isFinite(v) ? v : 0;
+  };
+  const set = (id, txt) => { const el = $(id); if (el) el.innerText = txt; };
+
+  function calc(){
+    const spoolPrice  = num('spoolPrice');
+    const spoolWeight = Math.max(1, num('spoolWeight'));
+    const qty         = Math.max(1, Math.round(num('qty')));
+    const weight1     = num('weight');
+
+    const timePer1 = Math.max(0, num('hours') + num('mins')/60);
+    const totalTime = timePer1 * qty;
+
+    const powerW = num('power');
+    const kwhRate = num('kwh');
+    const amortPerHour = num('amort');
+
+    const setup = num('setup');
+    const extra = num('extra') * qty;
+    const minOrder = num('minOrder');
+
+    // 🧾 Податки: розкладаємо "податки/місяць" на 1 замовлення
+    const taxMonthly = num('taxMonthly'); // напр. 5000
+    const ordersMonthly = Math.max(1, Math.round(num('ordersMonthly'))); // напр. 30
+    const taxPerOrder = taxMonthly / ordersMonthly;
+
+    const plastic = (spoolPrice / spoolWeight) * (weight1 * qty);
+    const energyPlusAmort = ((powerW/1000) * totalTime * kwhRate) + (totalTime * amortPerHour);
+
+    const total = plastic + energyPlusAmort + setup + extra;
+
+    // ✅ Ціна як на скріні, але додаємо податок на 1 замовлення (окремо від собівартості друку)
+    const p2 = Math.max(minOrder, (total * 2) + taxPerOrder);
+    const p3 = Math.max(minOrder, (total * 3) + taxPerOrder);
+
+    set('cPlastic', plastic.toFixed(2) + ' грн');
+    set('cEnergy', energyPlusAmort.toFixed(2) + ' грн');
+    set('cSetup', setup.toFixed(2) + ' грн');
+    set('cExtra', extra.toFixed(2) + ' грн');
+
+    set('total', total.toFixed(2) + ' грн');
+    set('p2', Math.ceil(p2) + ' грн');
+    set('p3', Math.ceil(p3) + ' грн');
+
+    const now = new Date();
+    set('status',
+      'Статус: перераховано ' + now.toLocaleTimeString() +
+      ' • Податок/замовлення ≈ ' + taxPerOrder.toFixed(0) + ' грн' +
+      ' ( ' + taxMonthly.toFixed(0) + ' грн / ' + ordersMonthly + ' замовл. )'
+    );
+  }
+
+  // Таби
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      $('material').value = tab.dataset.mat;
+      $('power').value = tab.dataset.w;
+      calc();
+    });
+  });
+
+  // Кнопка
+  $('recalcBtn').addEventListener('click', () => {
+    $('recalcBtn').textContent = '✅ Перераховано';
+    calc();
+    setTimeout(()=> $('recalcBtn').textContent = '🔄 Перерахувати', 700);
+  });
+
+  // Авто-перерахунок при зміні цифр
+  [
+    'spoolPrice','spoolWeight','kwh','amort','power','setup','minOrder',
+    'taxMonthly','ordersMonthly',
+    'extra','weight','qty','hours','mins'
+  ].forEach(id => {
+    const el = $(id);
+    if (el) {
+      el.addEventListener('input', calc);
+      el.addEventListener('change', calc);
+    }
+  });
+
+  // Старт
+  calc();
+})();
+</script>
+
+</body>
+</html>
