@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="uk">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>3D Калькулятор друку • Bambu A1 Mini</title>
 
-  <!-- ✅ PWA: щоб було як “додаток” -->
+  <!-- PWA -->
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#22c55e">
   <link rel="apple-touch-icon" href="icon-192.png">
@@ -29,15 +29,16 @@
     }
 
     *{box-sizing:border-box}
+
     body{
+      margin:0;
+      padding:20px;
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
       background:var(--bg);
-      margin:0;
       color:var(--text);
-      padding:20px;
     }
 
-    h1{margin:0 0 6px;font-size:34px;line-height:1.1}
+    h1{margin:0;font-size:34px}
     small{color:var(--muted);font-weight:600}
 
     .wrapper{
@@ -65,15 +66,14 @@
       gap:10px;
     }
 
-    .tabs{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+    .tabs{display:flex;gap:10px;margin-bottom:14px}
     .tab{
       padding:10px 16px;
       border-radius:999px;
       border:1px solid var(--line);
       background:#fff;
-      cursor:pointer;
       font-weight:900;
-      user-select:none;
+      cursor:pointer;
     }
     .tab.active{
       background:var(--accent);
@@ -87,46 +87,31 @@
       gap:14px;
     }
     .form.two{grid-template-columns:repeat(2,1fr)}
-    @media(max-width:900px){
-      .wrapper{grid-template-columns:1fr}
-      .form{grid-template-columns:1fr}
-      .form.two{grid-template-columns:1fr}
-    }
 
     label{
       font-size:13px;
       color:var(--muted);
+      font-weight:700;
       display:flex;
       flex-direction:column;
       gap:6px;
-      font-weight:700;
     }
 
     input{
-      padding:12px;
-      border-radius:14px;
+      padding:14px;
+      border-radius:16px;
       border:1px solid var(--line);
       font-size:18px;
-      outline:none;
-      background:#fff;
-    }
-    input:focus{
-      border-color:#a7f3d0;
-      box-shadow:0 0 0 4px rgba(34,197,94,.15);
     }
 
     .summary{position:sticky;top:20px}
-    @media(max-width:900px){.summary{position:static}}
 
     .row{
       display:flex;
       justify-content:space-between;
-      align-items:center;
       margin:12px 0;
       font-size:18px;
-      gap:10px;
     }
-    .row b{font-weight:950;white-space:nowrap}
 
     .totalBox{
       background:var(--greenBg);
@@ -135,19 +120,20 @@
       padding:18px;
       margin:16px 0;
     }
-    .totalBox .t{font-size:22px;margin-bottom:8px;font-weight:900}
-    .totalBox .v{font-size:40px;font-weight:1000;color:var(--accentDark)}
+    .totalBox .v{
+      font-size:36px;
+      font-weight:900;
+      color:var(--accentDark);
+    }
 
     .price{
       border-radius:var(--r);
       padding:16px;
       margin:14px 0;
-      border:1px solid transparent;
+      font-weight:900;
     }
-    .green{background:var(--greenBg);border-color:var(--greenLine)}
-    .purple{background:var(--purpleBg);border-color:var(--purpleLine)}
-    .price .cap{font-size:20px;font-weight:1000;margin-bottom:6px}
-    .price .val{font-size:22px;font-weight:900}
+    .green{background:var(--greenBg);border:1px solid var(--greenLine)}
+    .purple{background:var(--purpleBg);border:1px solid var(--purpleLine)}
 
     button{
       width:100%;
@@ -157,38 +143,23 @@
       background:var(--accent);
       color:#fff;
       font-size:22px;
-      font-weight:1000;
-      cursor:pointer;
-    }
-    button:active{transform:scale(.99)}
-    #status{
-      margin:10px 0;
-      color:var(--muted);
-      font-weight:800;
-      line-height:1.25;
-      font-size:14px;
+      font-weight:900;
     }
 
-    /* ✅ МОБІЛЬНИЙ ВИГЛЯД “ЯК ДОДАТОК” */
-    @media (max-width: 600px) {
-      body{padding:12px}
+    /* MOBILE */
+    @media(max-width:900px){
+      .wrapper{grid-template-columns:1fr}
+      .summary{position:static}
+      .form,.form.two{grid-template-columns:1fr}
       h1{font-size:26px}
-      small{font-size:13px}
-      .card{padding:16px;border-radius:16px}
-      label{font-size:14px}
-      input{font-size:20px;padding:14px;border-radius:16px}
-      .tab{padding:12px 16px;font-size:16px}
-      .row{font-size:18px}
-      .totalBox .v{font-size:34px}
-      button{font-size:22px;padding:18px;border-radius:16px}
-      #status{font-size:13px}
+      input,button{font-size:20px}
     }
   </style>
 </head>
 
 <body>
   <h1>💰 3D Калькулятор друку</h1>
-  <small>Bambu A1 Mini • PLA / PETG • грн • податки ФОП</small>
+  <small>Bambu A1 Mini • PLA / PETG • грн • ФОП</small>
 
   <div class="wrapper">
     <div>
@@ -196,197 +167,103 @@
         <h2>⚙️ Базові витрати</h2>
 
         <div class="tabs">
-          <div class="tab active" data-mat="PLA" data-w="130">PLA (130W)</div>
-          <div class="tab" data-mat="PETG" data-w="170">PETG (170W)</div>
+          <div class="tab active" data-m="PLA" data-w="130">PLA (130W)</div>
+          <div class="tab" data-m="PETG" data-w="170">PETG (170W)</div>
         </div>
 
         <div class="form">
-          <label>Ціна котушки (грн)
-            <input id="spoolPrice" type="number" step="0.01" value="500">
+          <label>Ціна котушки
+            <input id="spoolPrice" type="number" value="500">
           </label>
           <label>Вага котушки (г)
-            <input id="spoolWeight" type="number" step="1" value="1000">
+            <input id="spoolWeight" type="number" value="1000">
           </label>
-          <label>Тариф світла (грн/кВт·год)
-            <input id="kwh" type="number" step="0.01" value="4.32">
+          <label>Тариф світла
+            <input id="kwh" type="number" value="4.32">
           </label>
           <label>Амортизація (грн/год)
-            <input id="amort" type="number" step="0.01" value="10">
+            <input id="amort" type="number" value="10">
           </label>
           <label>Споживання (Вт)
-            <input id="power" type="number" step="1" value="130">
+            <input id="power" type="number" value="130">
           </label>
-          <label>Філамент у звіті
+          <label>Філамент
             <input id="material" type="text" value="PLA">
           </label>
         </div>
       </div>
 
       <div class="card">
-        <h2>🔧 Сервісні налаштування</h2>
-        <div class="form two">
-          <label>Ціна за запуск (грн)
-            <input id="setup" type="number" step="0.01" value="50">
+        <h2>📦 Модель</h2>
+        <div class="form">
+          <label>Вага 1 шт (г)
+            <input id="weight" type="number" value="0">
           </label>
-          <label>Мін. ціна замовлення (грн)
-            <input id="minOrder" type="number" step="0.01" value="150">
+          <label>Кількість
+            <input id="qty" type="number" value="1">
           </label>
-        </div>
-
-        <div style="height:14px"></div>
-
-        <h2 style="margin-top:0">🧾 Податки ФОП</h2>
-        <div class="form two">
-          <label>Податки/місяць (грн)
-            <input id="taxMonthly" type="number" step="0.01" value="5000">
+          <label>Час 1 шт (год)
+            <input id="hours" type="number" value="0">
           </label>
-          <label>Замовлень/місяць (шт)
-            <input id="ordersMonthly" type="number" step="1" value="30">
+          <label>Хв
+            <input id="mins" type="number" value="0">
+          </label>
+          <label>Додатково (грн)
+            <input id="extra" type="number" value="0">
           </label>
         </div>
       </div>
 
       <div class="card">
-        <h2>📦 Дані про модель</h2>
-        <div class="form">
-          <label>Назва деталі/замовлення
-            <input id="name" type="text" value="Коробка + кришка">
+        <h2>🧾 Податки</h2>
+        <div class="form two">
+          <label>Податки / місяць
+            <input id="taxMonthly" type="number" value="5000">
           </label>
-          <label>Додаткові витрати (грн/шт)
-            <input id="extra" type="number" step="0.01" value="0">
-          </label>
-          <label>Вага 1 шт (г)
-            <input id="weight" type="number" step="0.01" value="0">
-          </label>
-          <label>Кількість (шт)
-            <input id="qty" type="number" step="1" value="1">
-          </label>
-          <label>Час 1 шт (год)
-            <input id="hours" type="number" step="0.01" value="0">
-          </label>
-          <label>Хв
-            <input id="mins" type="number" step="1" value="0">
+          <label>Замовлень / місяць
+            <input id="ordersMonthly" type="number" value="30">
           </label>
         </div>
       </div>
     </div>
 
-    <div class="summary card">
-      <h2>Кошторис партії</h2>
+    <div class="card summary">
+      <h2>Кошторис</h2>
+      <div class="row"><span>Собівартість</span><b id="total">0 грн</b></div>
 
-      <div class="row"><span>Пластик:</span><b id="cPlastic">0.00 грн</b></div>
-      <div class="row"><span>Енергія + знос:</span><b id="cEnergy">0.00 грн</b></div>
-      <div class="row"><span>Запуск:</span><b id="cSetup">50.00 грн</b></div>
-      <div class="row"><span>Додатково:</span><b id="cExtra">0.00 грн</b></div>
+      <div class="price green">Ціна ×2: <span id="p2">0 грн</span></div>
+      <div class="price purple">Ціна ×3: <span id="p3">0 грн</span></div>
 
-      <div class="totalBox">
-        <div class="t">Собівартість:</div>
-        <div class="v" id="total">50.00 грн</div>
-      </div>
-
-      <div class="price green">
-        <div class="cap">ЦІНА (×2 + фікс + податки)</div>
-        <div class="val" id="p2">150 грн</div>
-      </div>
-
-      <div class="price purple">
-        <div class="cap">СКЛАДНЕ (×3 + фікс + податки)</div>
-        <div class="val" id="p3">150 грн</div>
-      </div>
-
-      <div id="status">Статус: скрипт ще не рахував…</div>
-      <button id="recalcBtn">🔄 Перерахувати</button>
+      <button onclick="calc()">🔄 Перерахувати</button>
     </div>
   </div>
 
 <script>
-(() => {
-  const $ = (id) => document.getElementById(id);
-  const num = (id) => {
-    const el = $(id);
-    if (!el) return 0;
-    const v = parseFloat(el.value);
-    return Number.isFinite(v) ? v : 0;
-  };
-  const set = (id, txt) => { const el = $(id); if (el) el.innerText = txt; };
+function calc(){
+  const n = id => Number(document.getElementById(id).value||0);
 
-  function calc(){
-    const spoolPrice  = num('spoolPrice');
-    const spoolWeight = Math.max(1, num('spoolWeight'));
-    const qty         = Math.max(1, Math.round(num('qty')));
-    const weight1     = num('weight');
+  const plastic = (n("spoolPrice")/n("spoolWeight")) * n("weight") * n("qty");
+  const time = (n("hours") + n("mins")/60) * n("qty");
+  const energy = (n("power")/1000) * time * n("kwh");
+  const amort = time * n("amort");
+  const tax = n("taxMonthly") / Math.max(1,n("ordersMonthly"));
 
-    const timePer1 = Math.max(0, num('hours') + num('mins')/60);
-    const totalTime = timePer1 * qty;
-
-    const powerW = num('power');
-    const kwhRate = num('kwh');
-    const amortPerHour = num('amort');
-
-    const setup = num('setup');
-    const extra = num('extra') * qty;
-    const minOrder = num('minOrder');
-
-    // Податки/замовлення
-    const taxMonthly = num('taxMonthly');
-    const ordersMonthly = Math.max(1, Math.round(num('ordersMonthly')));
-    const taxPerOrder = taxMonthly / ordersMonthly;
-
-    // Собівартість
-    const plastic = (spoolPrice / spoolWeight) * (weight1 * qty);
-    const energyPlusAmort = ((powerW/1000) * totalTime * kwhRate) + (totalTime * amortPerHour);
-    const total = plastic + energyPlusAmort + setup + extra;
-
-    // Ціни продажу
-    const p2 = Math.max(minOrder, (total * 2) + taxPerOrder);
-    const p3 = Math.max(minOrder, (total * 3) + taxPerOrder);
-
-    set('cPlastic', plastic.toFixed(2) + ' грн');
-    set('cEnergy', energyPlusAmort.toFixed(2) + ' грн');
-    set('cSetup', setup.toFixed(2) + ' грн');
-    set('cExtra', extra.toFixed(2) + ' грн');
-
-    set('total', total.toFixed(2) + ' грн');
-    set('p2', Math.ceil(p2) + ' грн');
-    set('p3', Math.ceil(p3) + ' грн');
-
-    const now = new Date();
-    set('status',
-      'Оновлено: ' + now.toLocaleTimeString() +
-      ' • Податок/замовлення ≈ ' + taxPerOrder.toFixed(0) + ' грн'
-    );
-  }
-
-  // Перемикач PLA/PETG
-  document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      $('material').value = tab.dataset.mat;
-      $('power').value = tab.dataset.w;
-      calc();
-    });
-  });
-
-  // Кнопка перерахунку
-  $('recalcBtn').addEventListener('click', () => {
-    $('recalcBtn').textContent = '✅ Перераховано';
-    calc();
-    setTimeout(()=> $('recalcBtn').textContent = '🔄 Перерахувати', 700);
-  });
-
-  // Авто-перерахунок при зміні полів
-  [
-    'spoolPrice','spoolWeight','kwh','amort','power','setup','minOrder',
-    'taxMonthly','ordersMonthly',
-    'extra','weight','qty','hours','mins'
-  ].forEach(id => {
-    const el = $(id);
-    if (el) { el.addEventListener('input', calc); el.addEventListener('change', calc); }
-  });
-
-  calc();
-})();
+  const total = plastic + energy + amort + n("extra");
+  document.getElementById("total").innerText = total.toFixed(0)+" грн";
+  document.getElementById("p2").innerText = Math.ceil(total*2+tax)+" грн";
+  document.getElementById("p3").innerText = Math.ceil(total*3+tax)+" грн";
+}
+calc();
 </script>
+
+<!-- SERVICE WORKER -->
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js");
+  });
+}
+</script>
+
 </body>
 </html>
